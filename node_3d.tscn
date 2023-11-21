@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://clkxv1amwrr48"]
+[gd_scene load_steps=6 format=3 uid="uid://dvjj4gkdaiu82"]
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
+[ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
@@ -22,3 +23,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_0raci")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.798478, 0.602024, 0, -0.602024, 0.798478, 0, 4.22176, 4.39859)
+script = ExtResource("2_x4mri")
