@@ -37,11 +37,9 @@ public partial class ChunkGenerator : Node3D
 		}
 	}
 
-	private int _chunkX = 0;
-	private double _accum = 0.0f;
 	private FastNoiseLite noise;
-
 	private readonly Dictionary<uint, ChunkData> chunks = new();
+	private readonly Queue<Vector2I> chunkUpdateQueue = new();
 
 	private static uint Pair2u(uint x, uint y) => 
 		x >= y ? x*x + x + y : y*y + x;
@@ -86,12 +84,22 @@ public partial class ChunkGenerator : Node3D
 		{
 			for (int z = 0; z < 10; z++)
 			{
-				MeshChunk(x, z);
+				chunkUpdateQueue.Enqueue(new Vector2I(x, z));
 			}
 		}
 	}
 
-	private void GenerateChunk(int cx, int cz)
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+
+		if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
+		{
+			MeshChunk(chunkPos.X, chunkPos.Y);
+		}
+    }
+
+    private void GenerateChunk(int cx, int cz)
 	{
 		// if chunk at (cx, cz) already exists, do not regenerate chunk
 		if (TryGetChunk(cx, cz, out _)) return;
@@ -137,9 +145,9 @@ public partial class ChunkGenerator : Node3D
 		var normals = new List<Vector3>();
 		var indices = new List<int>();
 
-		// helper lambdas
 		int indicesIndex = 0;
 
+		// helper functions
         void addVertexData(Vector3 normal)
         {
             /*uvs.Add(0); uvs.Add(0);
@@ -167,14 +175,32 @@ public partial class ChunkGenerator : Node3D
             indicesIndex += 4;
         }
 
-        void addVertex(Vector3 vertex)
-        {
-			verts.Add(vertex);
-            //verts.Add(vertex.X);
-            //verts.Add(vertex.Y);
-            //verts.Add(vertex.Z);
-        }
+		// get voxels in neighbor chunk
+		var neighborChunks = new ChunkData[4];
+		TryGetChunk(cx-1, cz, out neighborChunks[0]);
+		TryGetChunk(cx+1, cz, out neighborChunks[1]);
+		TryGetChunk(cx, cz-1, out neighborChunks[2]);
+		TryGetChunk(cx, cz+1, out neighborChunks[3]);
+		
+		bool isTransparent(int x, int y, int z)
+		{
+			if (x < 0 && neighborChunks[0] != null)
+				return IsTransparent(neighborChunks[0].Get(x + CHUNK_WIDTH, y, z));
 
+			else if (x >= CHUNK_WIDTH && neighborChunks[1] != null)
+				return IsTransparent(neighborChunks[1].Get(x - CHUNK_WIDTH, y, z));
+
+			if (z < 0 && neighborChunks[2] != null)
+				return IsTransparent(neighborChunks[2].Get(x, y, z + CHUNK_DEPTH));
+
+			else if (z >= CHUNK_DEPTH && neighborChunks[3] != null)
+				return IsTransparent(neighborChunks[3].Get(x, y, z - CHUNK_DEPTH));
+
+			return IsTransparent(chunkData.Get(x, y, z));
+		};
+
+		// loop through all blocks in the chunk
+		// to generate mesh data
         for (int x = 0; x < CHUNK_WIDTH; x++)
 		{
 			for (int y = 0; y < CHUNK_HEIGHT; y++)
@@ -187,62 +213,62 @@ public partial class ChunkGenerator : Node3D
 					Vector3I blockPos = new(x + cx * CHUNK_WIDTH, y, z + cz * CHUNK_DEPTH);
 
 					// top face
-					if (IsTransparent(chunkData.Get(x, y+1, z)))
+					if (isTransparent(x, y+1, z))
 					{
-						addVertex(new Vector3(0, 1, 0) + blockPos);
-						addVertex(new Vector3(1, 1, 0) + blockPos);
-						addVertex(new Vector3(1, 1, 1) + blockPos);
-						addVertex(new Vector3(0, 1, 1) + blockPos);
+						verts.Add(new Vector3(0, 1, 0) + blockPos);
+						verts.Add(new Vector3(1, 1, 0) + blockPos);
+						verts.Add(new Vector3(1, 1, 1) + blockPos);
+						verts.Add(new Vector3(0, 1, 1) + blockPos);
 						addVertexData(new Vector3(0, 1, 0));
 					}
 
 					// bottom face
-					if (IsTransparent(chunkData.Get(x, y-1, z)))
+					if (isTransparent(x, y-1, z))
 					{
-						addVertex(new Vector3(0, 0, 1) + blockPos);
-						addVertex(new Vector3(1, 0, 1) + blockPos);
-						addVertex(new Vector3(1, 0, 0) + blockPos);
-						addVertex(new Vector3(0, 0, 0) + blockPos);
+						verts.Add(new Vector3(0, 0, 1) + blockPos);
+						verts.Add(new Vector3(1, 0, 1) + blockPos);
+						verts.Add(new Vector3(1, 0, 0) + blockPos);
+						verts.Add(new Vector3(0, 0, 0) + blockPos);
 						addVertexData(new Vector3(0, -1, 0));
 					}
 
 					// right face
-					if (IsTransparent(chunkData.Get(x+1, y, z)))
+					if (isTransparent(x+1, y, z))
 					{
-						addVertex(new Vector3(1, 0, 0) + blockPos);
-						addVertex(new Vector3(1, 0, 1) + blockPos);
-						addVertex(new Vector3(1, 1, 1) + blockPos);
-						addVertex(new Vector3(1, 1, 0) + blockPos);
+						verts.Add(new Vector3(1, 0, 0) + blockPos);
+						verts.Add(new Vector3(1, 0, 1) + blockPos);
+						verts.Add(new Vector3(1, 1, 1) + blockPos);
+						verts.Add(new Vector3(1, 1, 0) + blockPos);
 						addVertexData(new Vector3(1, 0, 0));
 					}
 
 					// left face
-					if (IsTransparent(chunkData.Get(x-1, y, z)))
+					if (isTransparent(x-1, y, z))
 					{
-						addVertex(new Vector3(0, 1, 0) + blockPos);
-						addVertex(new Vector3(0, 1, 1) + blockPos);
-						addVertex(new Vector3(0, 0, 1) + blockPos);
-						addVertex(new Vector3(0, 0, 0) + blockPos);
+						verts.Add(new Vector3(0, 1, 0) + blockPos);
+						verts.Add(new Vector3(0, 1, 1) + blockPos);
+						verts.Add(new Vector3(0, 0, 1) + blockPos);
+						verts.Add(new Vector3(0, 0, 0) + blockPos);
 						addVertexData(new Vector3(-1, 0, 0));
 					}
 
 					// back face
-					if (IsTransparent(chunkData.Get(x, y, z-1)))
+					if (isTransparent(x, y, z-1))
 					{
-						addVertex(new Vector3(0, 0, 0) + blockPos);
-						addVertex(new Vector3(1, 0, 0) + blockPos);
-						addVertex(new Vector3(1, 1, 0) + blockPos);
-						addVertex(new Vector3(0, 1, 0) + blockPos);
+						verts.Add(new Vector3(0, 0, 0) + blockPos);
+						verts.Add(new Vector3(1, 0, 0) + blockPos);
+						verts.Add(new Vector3(1, 1, 0) + blockPos);
+						verts.Add(new Vector3(0, 1, 0) + blockPos);
 						addVertexData(new Vector3(0, 0, -1));
 					}
 
 					// front face
-					if (IsTransparent(chunkData.Get(x, y, z+1)))
+					if (isTransparent(x, y, z+1))
 					{
-						addVertex(new Vector3(0, 1, 1) + blockPos);
-						addVertex(new Vector3(1, 1, 1) + blockPos);
-						addVertex(new Vector3(1, 0, 1) + blockPos);
-						addVertex(new Vector3(0, 0, 1) + blockPos);
+						verts.Add(new Vector3(0, 1, 1) + blockPos);
+						verts.Add(new Vector3(1, 1, 1) + blockPos);
+						verts.Add(new Vector3(1, 0, 1) + blockPos);
+						verts.Add(new Vector3(0, 0, 1) + blockPos);
 						addVertexData(new Vector3(0, 0, 1));
 					}
 				}
@@ -275,7 +301,5 @@ public partial class ChunkGenerator : Node3D
 		};
 
 		AddChild(meshInstance);
-
-		
 	}
 }

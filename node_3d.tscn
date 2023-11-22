@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dvjj4gkdaiu82"]
+[gd_scene load_steps=8 format=3 uid="uid://bcsj22exuixqy"]
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
@@ -35,11 +35,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
 shape = SubResource("BoxShape3D_0raci")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.798478, 0.602024, 0, -0.602024, 0.798478, 0, 4.22176, 4.39859)
+transform = Transform3D(1, 0, 0, 0, 0.798478, 0.602024, 0, -0.602024, 0.798478, 0, 168.917, 4.39859)
 script = ExtResource("2_x4mri")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.0318424, 1.74449, 0.768908)
+transform = Transform3D(0.490387, -0.832718, 0.257101, 0.592962, 0.535001, 0.601806, -0.638684, -0.142667, 0.756128, 0.0318424, 1.74449, 0.768908)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.57204, 0)
