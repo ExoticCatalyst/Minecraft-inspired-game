@@ -5,8 +5,7 @@ type="CompressedTexture2D"
 uid="uid://qfv41j6ksefo"
 path.s3tc="res://.godot/imported/cobblestone.png-c4d46630da678093aacf551a35323590.s3tc.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
@@ -16,7 +15,7 @@ dest_files=["res://.godot/imported/cobblestone.png-c4d46630da678093aacf551a35323
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
