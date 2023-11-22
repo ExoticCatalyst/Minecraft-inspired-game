@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://clkxv1amwrr48"]
+[gd_scene load_steps=8 format=3 uid="uid://dtwtpo60xfrwx"]
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://Textures/cobblestone.png" id="1_slr24"]
 [ext_resource type="Script" path="res://scripts/CharacterController.gd" id="2_7485g"]
