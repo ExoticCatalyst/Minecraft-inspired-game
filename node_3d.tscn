@@ -1,8 +1,13 @@
 [gd_scene load_steps=8 format=3 uid="uid://clkxv1amwrr48"]
 
+<<<<<<< Updated upstream
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://cobblestone.png" id="1_sn7gm"]
 [ext_resource type="Texture2D" uid="uid://dm8os7k6gwf4m" path="res://planks.png" id="2_jwqmn"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
+=======
+[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
+[ext_resource type="Script" path="res://CharacterMovement.gd" id="3_p48e1"]
+>>>>>>> Stashed changes
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oy7ru"]
 albedo_texture = ExtResource("1_sn7gm")
@@ -13,15 +18,26 @@ albedo_texture = ExtResource("1_sn7gm")
 albedo_texture = ExtResource("2_jwqmn")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
+size = Vector3(22.685, 1, 22.971)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_15w86"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0tnxs"]
+size = Vector3(1, 2, 1)
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.000701487)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.07483, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+<<<<<<< Updated upstream
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189369, 0.0408374, 8.2016e-05)
 material_override = SubResource("StandardMaterial3D_oy7ru")
+=======
+transform = Transform3D(22.6846, 0, 0, 0, 1, 0, 0, 0, 22.9706, -0.0189369, 0.0422083, -0.00617003)
+>>>>>>> Stashed changes
 mesh = SubResource("BoxMesh_ho6gn")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_i07jl")
@@ -29,9 +45,36 @@ surface_material_override/0 = SubResource("StandardMaterial3D_i07jl")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_0raci")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.798478, 0.602024, 0, -0.602024, 0.798478, 0, 4.22176, 4.39859)
-script = ExtResource("2_x4mri")
+[node name="StaticBody3D2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.07483, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D2"]
+transform = Transform3D(2.92098, 0, 0, 0, 37.0586, 0, 0, 0, 22.9706, 11.9317, -1.94129, 0.14321)
+mesh = SubResource("BoxMesh_ho6gn")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2"]
+shape = SubResource("BoxShape3D_0raci")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+<<<<<<< Updated upstream
 transform = Transform3D(0.490387, -0.832718, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.548862, 1.74449, 0.172245)
+=======
+transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.0318424, 1.74449, 0.768908)
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("3_p48e1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_15w86")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("BoxShape3D_0tnxs")
+
+[node name="Head" type="Node3D" parent="CharacterBody3D"]
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.487626, 0)
+fov = 90.0
+>>>>>>> Stashed changes
