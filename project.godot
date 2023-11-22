@@ -57,11 +57,6 @@ Space={
 ]
 }
 
-[layer_names]
-
-3d_physics/layer_1="Voxel"
-3d_physics/layer_2="Entity"
-
 [physics]
 
 3d/default_gravity=9.235

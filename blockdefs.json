@@ -1,0 +1,28 @@
+{
+	"stone": {
+		"texture": "res://Textures/stone.png"
+	},
+	"dirt": {
+		"texture": "res://Textures/dirt.png"
+	},
+	"grass": {
+		"sideTexture": "res://Textures/grass side.png",
+		"topTexture": "res://Textures/grass top.png",
+		"bottomTexture": "res://Textures/dirt.png"
+	},
+	"cobblestone": {
+		"texture": "res://Textures/cobblestone.png"
+	},
+	"log": {
+		"sideTexture": "res://Textures/log side.png",
+		"topTexture": "res://Textures/log top v2.png",
+		"bottomTexture": "res://Textures/log top v2.png"
+	},
+	"leaves": {
+		"transparent": true,
+		"texture": "res://Textures/leaves v2.png"
+	},
+	"planks": {
+		"texture": "res://Textures/planks.png"
+	}
+}

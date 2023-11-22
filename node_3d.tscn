@@ -1,13 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcsj22exuixqy"]
+[gd_scene load_steps=10 format=3 uid="uid://bcsj22exuixqy"]
 
-[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://Textures/cobblestone.png" id="1_slr24"]
 [ext_resource type="Script" path="res://scripts/CharacterController.gd" id="2_7485g"]
 [ext_resource type="Script" path="res://cs/VoxelWorld.cs" id="3_my4rh"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqrb2"]
-albedo_texture = ExtResource("1_slr24")
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ehpc2"]
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)

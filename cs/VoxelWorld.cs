@@ -1,7 +1,7 @@
 using Godot;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Voxel
 {
@@ -11,18 +11,18 @@ namespace Voxel
 		public const int SIZE_Y = 128;
 		public const int SIZE_Z = 16;
 
-		private readonly int[] data;
+		private readonly uint[] data;
 
 		public ChunkData()
 		{
 			int arrSize = SIZE_X * SIZE_Y * SIZE_Z;
-			data = new int[arrSize];
+			data = new uint[arrSize];
 
 			for (int i = 0; i < arrSize; i++)
 				data[i] = 0;
 		}
 
-		public int Get(int x, int y, int z)
+		public uint Get(int x, int y, int z)
 		{
 			// if coordinates are out of bounds, return air block
 			if (x < 0 || y < 0 || z < 0 || x >= SIZE_X || y >= SIZE_Y || z >= SIZE_Z)
@@ -30,7 +30,7 @@ namespace Voxel
 			return data[y * SIZE_X*SIZE_Z + x * SIZE_X + z];
 		}
 
-		public void Set(int x, int y, int z, int v)
+		public void Set(int x, int y, int z, uint v)
 		{
 			if (x < 0 || y < 0 || z < 0 || x >= SIZE_X || y >= SIZE_Y || z >= SIZE_Z)
 				return;
@@ -72,7 +72,60 @@ namespace Voxel
 		private void QueueChunkUpdate(int cx, int cz)
 		{
 			chunkUpdateQueue.Enqueue(new Vector2I(cx, cz));
-		}
+		}		
+
+		class BlockDef {
+			public string texture { get; set; }
+			public string sideTexture { get; set; }
+			public string topTexture { get; set; }
+			public string bottomTexture { get; set; }
+		};
+
+		private string[] intIdToString;
+		private Dictionary<string, uint> stringIdToInt = new();
+		private Texture2DArray textureArray;
+
+		public Texture2DArray Texture2DArray { get => textureArray; }
+
+		// parse block definitions
+		public VoxelWorld()
+		{
+			var file = FileAccess.Open("res://blockdefs.json", FileAccess.ModeFlags.Read)
+				?? throw new Exception("Block definitions file is missing");
+			
+            var jsonData = JsonSerializer.Deserialize<Dictionary<string, BlockDef>>(file.GetAsText(true));
+
+			// var texArray = new Texture2DArray();
+			
+			var images = new List<Image>();
+			var ids = new List<string>();
+
+			ids.Add("air");
+			stringIdToInt.Add("air", 0);
+
+			uint curId = 1;
+			foreach (var entry in jsonData)
+			{
+				var texturePath = entry.Value.texture ?? entry.Value.sideTexture;
+				//var image = Image.LoadFromFile(texturePath);
+				var image = GD.Load(texturePath) as Image;
+				images.Add(image);
+
+				var format = image.GetFormat();
+				GD.Print($"{texturePath} has format {format}");
+
+				ids.Add(entry.Key);
+				stringIdToInt.Add(entry.Key, curId);
+				curId++;
+            }
+
+			textureArray = new Texture2DArray();
+			textureArray.CreateFromImages(new Godot.Collections.Array<Image>(images));
+
+			GD.Print($"created array texture with {images.Count} images");
+
+			intIdToString = ids.ToArray();
+        }
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
@@ -102,7 +155,8 @@ namespace Voxel
 		{
 			base._Process(delta);
 
-			for (int i = 0; i < 2; i++)
+			// process up to 8 chunk updates
+			for (int i = 0; i < 8; i++)
 			{
 				if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
 				{
@@ -121,6 +175,16 @@ namespace Voxel
 			}
 		}
 
+		public uint GetBlockIndex(string id)
+		{
+			return stringIdToInt[id];
+		}
+
+		public string GetBlockIDFromIndex(uint index)
+		{
+			return intIdToString[index];
+		}
+
 		private void GenerateChunk(int cx, int cz)
 		{
 			// if chunk at (cx, cz) already exists, do not regenerate chunk
@@ -133,6 +197,11 @@ namespace Voxel
 			const int CHUNK_HEIGHT = ChunkData.SIZE_Y;
 			const int CHUNK_DEPTH = ChunkData.SIZE_Z;
 
+			var airBlock = GetBlockIndex("air");
+			var grassBlock = GetBlockIndex("grass");
+			var stoneBlock = GetBlockIndex("stone");
+			var dirtBlock = GetBlockIndex("dirt");
+
 			for (int x = 0; x < CHUNK_WIDTH; x++)
 			{
 				for (int z = 0; z < CHUNK_DEPTH; z++)
@@ -141,14 +210,27 @@ namespace Voxel
 
 					for (int y = 0; y < CHUNK_HEIGHT; y++)
 					{
-						chunkData.Set(x, y, z, y >= height ? 0 : 1);
+						var block = airBlock;
+
+						if (y < height - 8)
+						{
+							block = stoneBlock;
+						}
+						else if (y < height)
+						{
+							block = dirtBlock;
+						}
+						else if (y == height)
+							block = grassBlock;
+						
+						chunkData.Set(x, y, z, block);
 					}
 				}
 			}
 			
 			AddChunk(cx, cz, chunkData);
 
-			GD.Print($"chunk gen took {(Time.GetTicksMsec() - prevTime)} ms");
+			// GD.Print($"chunk gen took {(Time.GetTicksMsec() - prevTime)} ms");
 		}
 
 		private static int Mod(int x, int m) {
@@ -168,7 +250,7 @@ namespace Voxel
 				var localX = Mod(blockPos.X, ChunkData.SIZE_X);
 				var localZ = Mod(blockPos.Z, ChunkData.SIZE_X); 
 
-				return chunk.Get(localX, blockPos.Y, localZ);
+				return (int) chunk.Get(localX, blockPos.Y, localZ);
 			}
 			else
 			{
@@ -188,7 +270,7 @@ namespace Voxel
 				var localX = Mod(blockPos.X, ChunkData.SIZE_X);
 				var localZ = Mod(blockPos.Z, ChunkData.SIZE_X); 
 
-				chunk.Set(localX, blockPos.Y, localZ, blockId);
+				chunk.Set(localX, blockPos.Y, localZ, (uint) blockId);
 				
 				QueueChunkUpdate(chunkX, chunkZ);
 
