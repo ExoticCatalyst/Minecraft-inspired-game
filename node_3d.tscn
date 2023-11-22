@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://clkxv1amwrr48"]
+[gd_scene load_steps=8 format=3 uid="uid://dvjj4gkdaiu82"]
 
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_6nsyx"]
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
 
@@ -9,6 +10,9 @@
 albedo_texture = ExtResource("1_eevto")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_exydt"]
+vertex_color_use_as_albedo = true
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.000701487)
@@ -30,3 +34,8 @@ script = ExtResource("2_x4mri")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.0318424, 1.74449, 0.768908)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.57204, 0)
+material_override = SubResource("StandardMaterial3D_exydt")
+script = ExtResource("1_6nsyx")
