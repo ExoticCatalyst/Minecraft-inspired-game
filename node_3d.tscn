@@ -39,6 +39,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="StaticBody3D/MeshInstance3D"]
+collision_layer = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/MeshInstance3D/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_ehpc2")
@@ -51,6 +52,7 @@ transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 103.096, 114.81, 66.8113)
+collision_layer = 2
 script = ExtResource("2_7485g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
@@ -63,6 +65,8 @@ shape = SubResource("BoxShape3D_xi2vj")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545283, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
 
 [node name="VoxelWorld" type="Node3D" parent="."]
 script = ExtResource("3_my4rh")

@@ -61,6 +61,8 @@ namespace Voxel
                 throw new System.NullReferenceException("ChunkMesh is not ready");
             }
 
+            arrayMesh.ClearSurfaces();
+
             const int CHUNK_WIDTH = ChunkData.SIZE_X;
 			const int CHUNK_HEIGHT = ChunkData.SIZE_Y;
 			const int CHUNK_DEPTH = ChunkData.SIZE_Z;
@@ -200,8 +202,6 @@ namespace Voxel
             }
 
             // convert lists to arrays and assign to surface array
-            GD.Print(verts.Count);
-
             surfaceArray[(int)Mesh.ArrayType.Vertex] = verts.ToArray();
             surfaceArray[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
             surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();

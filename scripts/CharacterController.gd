@@ -16,6 +16,11 @@ var gravity = 32
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var voxel_world = get_node("../VoxelWorld")
+@onready var raycaster = $Head/Camera3D/RayCast3D
+
+var has_raycast_hit = false
+var raycast_grid = Vector3i()
+var raycast_normal = Vector3()
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -26,9 +31,13 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 	
-	if event is InputEventKey:
-		if event.keycode == KEY_E and event.pressed:
-			voxel_world.set_block(position, 1)
+	if event is InputEventMouseButton:
+		if event.pressed and has_raycast_hit:
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				# print(raycast_grid)
+				voxel_world.set_block(raycast_grid, 0)
+			elif event.button_index == MOUSE_BUTTON_RIGHT:
+				voxel_world.set_block(raycast_grid + Vector3i(raycast_normal), 1)
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -55,10 +64,20 @@ func _physics_process(delta):
 		t_bob += delta * velocity.length() *  float(is_on_floor())
 		camera.transform.origin = _headbob(t_bob)
 	
-	var voxel_world = get_node("../VoxelWorld")
+	# raycast
+	var mouse_pos = get_viewport().get_mouse_position()
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * 8
+	var query = PhysicsRayQueryParameters3D.create(from, to, 1)
+	var result = get_world_3d().direct_space_state.intersect_ray(query)
+	
+	has_raycast_hit = false
+	if result:
+		has_raycast_hit = true
+		raycast_grid = Vector3i(result.position - result.normal * 0.1)
+		raycast_normal = result.normal
 	
 	move_and_slide()
-
 
 func _headbob(time) -> Vector3:
 	var pos = Vector3.ZERO

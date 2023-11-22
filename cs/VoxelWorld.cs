@@ -69,6 +69,11 @@ namespace Voxel
 			return chunks.TryGetValue(Pair2s(cx, cz), out chunk);
 		}
 
+		private void QueueChunkUpdate(int cx, int cz)
+		{
+			chunkUpdateQueue.Enqueue(new Vector2I(cx, cz));
+		}
+
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
@@ -97,18 +102,21 @@ namespace Voxel
 		{
 			base._Process(delta);
 
-			if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
+			for (int i = 0; i < 2; i++)
 			{
-				uint pair = Pair2s(chunkPos.X, chunkPos.Y);
-				if (chunkMeshes.TryGetValue(pair, out ChunkMesh mesh))
+				if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
 				{
-					mesh.GenerateMesh();
-				}
-				else
-				{
-					mesh = new ChunkMesh(this, chunkPos.X, chunkPos.Y);
-					AddChild(mesh);
-					chunkMeshes.Add(pair, mesh);
+					uint pair = Pair2s(chunkPos.X, chunkPos.Y);
+					if (chunkMeshes.TryGetValue(pair, out ChunkMesh mesh))
+					{
+						mesh.GenerateMesh();
+					}
+					else
+					{
+						mesh = new ChunkMesh(this, chunkPos.X, chunkPos.Y);
+						AddChild(mesh);
+						chunkMeshes.Add(pair, mesh);
+					}
 				}
 			}
 		}
@@ -181,7 +189,21 @@ namespace Voxel
 				var localZ = Mod(blockPos.Z, ChunkData.SIZE_X); 
 
 				chunk.Set(localX, blockPos.Y, localZ, blockId);
-				chunkUpdateQueue.Enqueue(new Vector2I(chunkX, chunkZ));
+				
+				QueueChunkUpdate(chunkX, chunkZ);
+
+				// queue updates on chunk borders
+				if (localX == 0 && TryGetChunk(chunkX-1, chunkZ, out _))
+					QueueChunkUpdate(chunkX-1, chunkZ);
+
+				if (localZ == 0 && TryGetChunk(chunkX, chunkZ-1, out _))
+					QueueChunkUpdate(chunkX, chunkZ-1);
+
+				if (localX == ChunkData.SIZE_X - 1 && TryGetChunk(chunkX+1, chunkZ, out _))
+					QueueChunkUpdate(chunkX+1, chunkZ);
+
+				if (localZ == ChunkData.SIZE_Z - 1 && TryGetChunk(chunkX, chunkZ+1, out _))
+					QueueChunkUpdate(chunkX, chunkZ+1);
 			}
 		}
 
