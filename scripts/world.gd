@@ -27,6 +27,7 @@ func _ready():
 	
 	material_override = StandardMaterial3D.new()
 	material_override.albedo_texture = load("res://stone.png")
+	material_override.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	pass # Replace with function body.
 
 
