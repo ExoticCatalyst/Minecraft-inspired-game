@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -41,6 +42,7 @@ namespace Voxel
 	{
 		private FastNoiseLite noise;
 		private readonly Dictionary<uint, ChunkData> chunks = new();
+		private readonly Dictionary<uint, ChunkMesh> chunkMeshes = new();
 		private readonly Queue<Vector2I> chunkUpdateQueue = new();
 
 		private static uint Pair2u(uint x, uint y) => 
@@ -97,8 +99,17 @@ namespace Voxel
 
 			if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
 			{
-				var mesh = new ChunkMesh(this, chunkPos.X, chunkPos.Y);
-				AddChild(mesh);
+				uint pair = Pair2s(chunkPos.X, chunkPos.Y);
+				if (chunkMeshes.TryGetValue(pair, out ChunkMesh mesh))
+				{
+					mesh.GenerateMesh();
+				}
+				else
+				{
+					mesh = new ChunkMesh(this, chunkPos.X, chunkPos.Y);
+					AddChild(mesh);
+					chunkMeshes.Add(pair, mesh);
+				}
 			}
 		}
 
@@ -131,5 +142,49 @@ namespace Voxel
 
 			GD.Print($"chunk gen took {(Time.GetTicksMsec() - prevTime)} ms");
 		}
+
+		private static int Mod(int x, int m) {
+			return (x%m + m)%m;
+		}
+
+		#region GDScript Interfaces
+
+		public int get_block(Vector3I blockPos)
+		{
+			var chunkX = blockPos.X / ChunkData.SIZE_X;
+			var chunkZ = blockPos.Z / ChunkData.SIZE_Z;
+
+			if (TryGetChunk(chunkX, chunkZ, out ChunkData chunk))
+			{
+				// a chunk does exist at this position
+				var localX = Mod(blockPos.X, ChunkData.SIZE_X);
+				var localZ = Mod(blockPos.Z, ChunkData.SIZE_X); 
+
+				return chunk.Get(localX, blockPos.Y, localZ);
+			}
+			else
+			{
+				// chunk does not exist, return air
+				return 0;
+			}
+		}
+
+		public void set_block(Vector3I blockPos, int blockId)
+		{
+			var chunkX = blockPos.X / ChunkData.SIZE_X;
+			var chunkZ = blockPos.Z / ChunkData.SIZE_Z;
+
+			if (TryGetChunk(chunkX, chunkZ, out ChunkData chunk))
+			{
+				// a chunk does exist at this position
+				var localX = Mod(blockPos.X, ChunkData.SIZE_X);
+				var localZ = Mod(blockPos.Z, ChunkData.SIZE_X); 
+
+				chunk.Set(localX, blockPos.Y, localZ, blockId);
+				chunkUpdateQueue.Enqueue(new Vector2I(chunkX, chunkZ));
+			}
+		}
+
+		#endregion
 	}
 }
