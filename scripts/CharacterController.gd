@@ -46,8 +46,11 @@ func _physics_process(delta):
 		velocity.z = 0
 		
 	#Head bob
-	t_bob += delta * velocity.length() *  float(is_on_floor())
-	camera.transform.origin = _headbob(t_bob)
+	if not is_on_wall():
+		t_bob += delta * velocity.length() *  float(is_on_floor())
+		camera.transform.origin = _headbob(t_bob)
+	
+	
 
 	move_and_slide()
 
