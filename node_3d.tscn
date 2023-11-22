@@ -27,7 +27,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.3
 
 [node name="Node3D" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.000701487)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.107036, 0.00201589, 0.157944)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(18.7214, 0, 0, 0, 1, 0, 0, 0, 18.3992, 0, -1.58394, 0)
@@ -47,7 +47,9 @@ shape = SubResource("ConcavePolygonShape3D_ehpc2")
 shape = SubResource("BoxShape3D_0raci")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.0318424, 1.74449, 0.768908)
+transform = Transform3D(1, 0, 0, 0, 0.601759, 0.798678, 0, -0.798678, 0.601759, 0.0318424, 1.74449, 0.768908)
+shadow_enabled = true
+shadow_blur = 0.0
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 103.096, 114.81, 66.8113)
