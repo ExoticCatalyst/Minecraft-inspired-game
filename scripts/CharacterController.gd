@@ -16,7 +16,6 @@ var gravity = 32
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var voxel_world = get_node("../VoxelWorld")
-@onready var raycaster = $Head/Camera3D/RayCast3D
 
 var has_raycast_hit = false
 var raycast_grid = Vector3i()
@@ -25,7 +24,7 @@ var raycast_normal = Vector3()
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _input(event):
+func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)

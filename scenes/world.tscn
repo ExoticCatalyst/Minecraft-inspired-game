@@ -47,7 +47,7 @@ shape = SubResource("ConcavePolygonShape3D_ehpc2")
 shape = SubResource("BoxShape3D_0raci")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0318424, 1.74449, 0.768908)
+transform = Transform3D(1, 0, 0, 0, 0.665491, 0.746406, 0, -0.746406, 0.665491, 0.0318424, 1.74449, 0.768908)
 shadow_enabled = true
 script = ExtResource("2_x43co")
 
@@ -66,8 +66,6 @@ shape = SubResource("BoxShape3D_xi2vj")
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545283, 0)
-
-[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
 
 [node name="VoxelWorld" type="Node3D" parent="."]
 script = ExtResource("3_my4rh")
