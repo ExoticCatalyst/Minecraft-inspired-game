@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 
-const SPEED = 4.317
+const SPEED = 3.8
 const JUMP_VELOCITY = 8.94427191
 const SENSITIVITY = 0.005
 
@@ -44,7 +44,7 @@ func _physics_process(delta):
 	else:
 		velocity.x = 0
 		velocity.z = 0
-		
+	
 	#Head bob
 	if not is_on_wall():
 		t_bob += delta * velocity.length() *  float(is_on_floor())

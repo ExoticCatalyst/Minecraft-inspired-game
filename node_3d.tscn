@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://Textures/cobblestone.png" id="1_slr24"]
 [ext_resource type="Script" path="res://scripts/CharacterController.gd" id="2_7485g"]
-[ext_resource type="Script" path="res://cs/ChunkGenerator.cs" id="3_squeb"]
+[ext_resource type="Script" path="res://cs/VoxelWorld.cs" id="3_my4rh"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
@@ -64,8 +64,8 @@ shape = SubResource("BoxShape3D_xi2vj")
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545283, 0)
 
-[node name="Node3D" type="Node3D" parent="."]
-script = ExtResource("3_squeb")
+[node name="VoxelWorld" type="Node3D" parent="."]
+script = ExtResource("3_my4rh")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_durc2")
