@@ -289,7 +289,7 @@ public partial class ChunkGenerator : Node3D
 		GD.Print($"chunk mesh took {Time.GetTicksMsec() - startTime} ms");
 
 		var material = new StandardMaterial3D() {
-			AlbedoTexture = GD.Load("res://stone.png") as Texture2D,
+			AlbedoTexture = GD.Load("res://Textures/stone.png") as Texture2D,
 			TextureFilter = BaseMaterial3D.TextureFilterEnum.Nearest,
 			SpecularMode = BaseMaterial3D.SpecularModeEnum.Disabled
 		};
