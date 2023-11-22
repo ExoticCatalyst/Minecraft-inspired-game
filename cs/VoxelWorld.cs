@@ -74,18 +74,27 @@ namespace Voxel
 			chunkUpdateQueue.Enqueue(new Vector2I(cx, cz));
 		}		
 
-		class BlockDef {
+		class JsonBlockDef {
 			public string texture { get; set; }
 			public string sideTexture { get; set; }
 			public string topTexture { get; set; }
 			public string bottomTexture { get; set; }
 		};
 
+		public struct BlockTextureDef {
+			public uint sideIndex;
+			public uint topIndex;
+			public uint bottomIndex;
+		}
+
 		private string[] intIdToString;
 		private Dictionary<string, uint> stringIdToInt = new();
-		private Texture2DArray textureArray;
 
+		// these are for chunk meshing
+		private Texture2DArray textureArray;
 		public Texture2DArray Texture2DArray { get => textureArray; }
+		private BlockTextureDef[] blockTexDefs;
+		public BlockTextureDef[] BlockTextureData { get => blockTexDefs; }
 
 		// parse block definitions
 		public VoxelWorld()
@@ -93,30 +102,67 @@ namespace Voxel
 			var file = FileAccess.Open("res://blockdefs.json", FileAccess.ModeFlags.Read)
 				?? throw new Exception("Block definitions file is missing");
 			
-            var jsonData = JsonSerializer.Deserialize<Dictionary<string, BlockDef>>(file.GetAsText(true));
+            var jsonData = JsonSerializer.Deserialize<Dictionary<string, JsonBlockDef>>(file.GetAsText(true));
 
-			// var texArray = new Texture2DArray();
-			
 			var images = new List<Image>();
 			var ids = new List<string>();
+			var texDefs = new List<BlockTextureDef>();
 
 			ids.Add("air");
 			stringIdToInt.Add("air", 0);
 
-			uint curId = 1;
-			foreach (var entry in jsonData)
+			uint nextBlockId = 1;
+			uint nextTexId = 0;
+
+			uint registerImage(string texturePath)
 			{
-				var texturePath = entry.Value.texture ?? entry.Value.sideTexture;
-				//var image = Image.LoadFromFile(texturePath);
 				var image = GD.Load(texturePath) as Image;
-				images.Add(image);
+
+				// format and size validation
+				if (image.GetSize() != new Vector2I(32, 32))
+				{
+					throw new Exception($"{texturePath} is not a 32x32 image");
+				}
 
 				var format = image.GetFormat();
-				GD.Print($"{texturePath} has format {format}");
+				if (format != Image.Format.Rgba8)
+				{
+					throw new Exception($"{texturePath} has invalid format {format}, expected Rgba8");
+				}
+				
+				images.Add(image);
+				return nextTexId++;
+			}
 
+			foreach (var entry in jsonData)
+			{
+				// register block
 				ids.Add(entry.Key);
-				stringIdToInt.Add(entry.Key, curId);
-				curId++;
+				stringIdToInt.Add(entry.Key, nextBlockId++);
+
+				// register textures
+				BlockTextureDef texDef;
+
+				// if block has only one texture
+				if (entry.Value.texture != null)
+				{
+					var texID = registerImage(entry.Value.texture);
+					texDef.topIndex = texID;
+					texDef.sideIndex = texID;
+					texDef.bottomIndex = texID;
+					
+					GD.Print($"{entry.Key}: {texID}");
+				}
+
+				// if block has multiple textures
+				else
+				{
+					texDef.topIndex = registerImage(entry.Value.topTexture);
+					texDef.sideIndex = registerImage(entry.Value.sideTexture);
+					texDef.bottomIndex = registerImage(entry.Value.bottomTexture);
+				}
+
+				texDefs.Add(texDef);
             }
 
 			textureArray = new Texture2DArray();
@@ -125,6 +171,7 @@ namespace Voxel
 			GD.Print($"created array texture with {images.Count} images");
 
 			intIdToString = ids.ToArray();
+			blockTexDefs = texDefs.ToArray();
         }
 
 		// Called when the node enters the scene tree for the first time.

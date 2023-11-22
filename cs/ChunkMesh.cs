@@ -53,12 +53,15 @@ namespace Voxel
             return blockIndex == 0;
         }
 
+        enum BlockSide
+        {
+            Top, Bottom, Front, Back, Left, Right
+        }
+
         public void GenerateMesh()
         {
             if (arrayMesh == null || collisionShape == null)
-            {
                 throw new System.NullReferenceException("ChunkMesh is not ready");
-            }
 
             arrayMesh.ClearSurfaces();
 
@@ -79,17 +82,58 @@ namespace Voxel
 
             int indicesIndex = 0;
 
+            var texDefs = world.BlockTextureData;
+
             // helper function
-            void addVertexData(Vector3 normal, uint blockId)
+            void addVertexData(BlockSide side, uint blockId)
             {
+                Vector3 normal;
+                uint texIndex;
+
+                switch (side)
+                {
+                    case BlockSide.Top:
+                        normal = new Vector3(0, 1, 0);
+                        texIndex = texDefs[blockId - 1].topIndex;
+                        break;
+
+                    case BlockSide.Bottom:
+                        normal = new Vector3(0, -1, 0);
+                        texIndex = texDefs[blockId - 1].bottomIndex;
+                        break;
+
+                    case BlockSide.Front:
+                        normal = new Vector3(0, 0, 1);
+                        texIndex = texDefs[blockId - 1].sideIndex;
+                        break;
+
+                    case BlockSide.Back:
+                        normal = new Vector3(0, 0, -1);
+                        texIndex = texDefs[blockId - 1].sideIndex;
+                        break;
+
+                    case BlockSide.Left:
+                        normal = new Vector3(-1, 0, 0);
+                        texIndex = texDefs[blockId - 1].sideIndex;
+                        break;
+
+                    case BlockSide.Right:
+                        normal = new Vector3(1, 1, 0);
+                        texIndex = texDefs[blockId - 1].sideIndex;
+                        break;
+
+                    default:
+                        throw new System.Exception("invalid BlockSide");
+                }
+
                 uvs.Add(new Vector2(0, 0));
                 uvs.Add(new Vector2(1, 0));
                 uvs.Add(new Vector2(1, 1));
                 uvs.Add(new Vector2(0, 1));
-                uvs2.Add(new Vector2(blockId - 1, 0));
-                uvs2.Add(new Vector2(blockId - 1, 0));
-                uvs2.Add(new Vector2(blockId - 1, 0));
-                uvs2.Add(new Vector2(blockId - 1, 0));
+                uvs2.Add(new Vector2(texIndex, 0));
+                uvs2.Add(new Vector2(texIndex, 0));
+                uvs2.Add(new Vector2(texIndex, 0));
+                uvs2.Add(new Vector2(texIndex, 0));
                 normals.Add(normal);
                 normals.Add(normal);
                 normals.Add(normal);
@@ -125,7 +169,7 @@ namespace Voxel
                     return IsTransparent(neighborChunks[3].Get(x, y, z - CHUNK_DEPTH));
 
                 return IsTransparent(chunkData.Get(x, y, z));
-            };
+            }
 
             // loop through all blocks in the chunk
             // to generate mesh data
@@ -148,7 +192,7 @@ namespace Voxel
                             verts.Add(new Vector3(1, 1, 0) + blockPos);
                             verts.Add(new Vector3(1, 1, 1) + blockPos);
                             verts.Add(new Vector3(0, 1, 1) + blockPos);
-                            addVertexData(new Vector3(0, 1, 0), blockType);
+                            addVertexData(BlockSide.Top, blockType);
                         }
 
                         // bottom face
@@ -158,17 +202,17 @@ namespace Voxel
                             verts.Add(new Vector3(1, 0, 1) + blockPos);
                             verts.Add(new Vector3(1, 0, 0) + blockPos);
                             verts.Add(new Vector3(0, 0, 0) + blockPos);
-                            addVertexData(new Vector3(0, -1, 0), blockType);
+                            addVertexData(BlockSide.Bottom, blockType);
                         }
 
                         // right face
                         if (isTransparent(x+1, y, z))
                         {
-                            verts.Add(new Vector3(1, 0, 0) + blockPos);
-                            verts.Add(new Vector3(1, 0, 1) + blockPos);
                             verts.Add(new Vector3(1, 1, 1) + blockPos);
                             verts.Add(new Vector3(1, 1, 0) + blockPos);
-                            addVertexData(new Vector3(1, 0, 0), blockType);
+                            verts.Add(new Vector3(1, 0, 0) + blockPos);
+                            verts.Add(new Vector3(1, 0, 1) + blockPos);
+                            addVertexData(BlockSide.Right, blockType);
                         }
 
                         // left face
@@ -178,17 +222,17 @@ namespace Voxel
                             verts.Add(new Vector3(0, 1, 1) + blockPos);
                             verts.Add(new Vector3(0, 0, 1) + blockPos);
                             verts.Add(new Vector3(0, 0, 0) + blockPos);
-                            addVertexData(new Vector3(-1, 0, 0), blockType);
+                            addVertexData(BlockSide.Left, blockType);
                         }
 
                         // back face
                         if (isTransparent(x, y, z-1))
                         {
-                            verts.Add(new Vector3(0, 0, 0) + blockPos);
-                            verts.Add(new Vector3(1, 0, 0) + blockPos);
                             verts.Add(new Vector3(1, 1, 0) + blockPos);
                             verts.Add(new Vector3(0, 1, 0) + blockPos);
-                            addVertexData(new Vector3(0, 0, -1), blockType);
+                            verts.Add(new Vector3(0, 0, 0) + blockPos);
+                            verts.Add(new Vector3(1, 0, 0) + blockPos);
+                            addVertexData(BlockSide.Back, blockType);
                         }
 
                         // front face
@@ -198,7 +242,7 @@ namespace Voxel
                             verts.Add(new Vector3(1, 1, 1) + blockPos);
                             verts.Add(new Vector3(1, 0, 1) + blockPos);
                             verts.Add(new Vector3(0, 0, 1) + blockPos);
-                            addVertexData(new Vector3(0, 0, 1), blockType);
+                            addVertexData(BlockSide.Front, blockType);
                         }
                     }
                 }
