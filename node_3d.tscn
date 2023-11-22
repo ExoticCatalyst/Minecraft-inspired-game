@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvjj4gkdaiu82"]
+[gd_scene load_steps=8 format=3 uid="uid://dvjj4gkdaiu82"]
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
@@ -11,6 +11,14 @@ specular_mode = 2
 albedo_texture = ExtResource("1_eevto")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
+
+[sub_resource type="Environment" id="Environment_knck2"]
+background_mode = 1
+background_color = Color(0.290196, 0.596078, 0.74902, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.2
+reflected_light_source = 1
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.000701487)
@@ -38,3 +46,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.57204, 0)
 
 [node name="Chunks" type="Node3D" parent="."]
 script = ExtResource("3_squeb")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_knck2")

@@ -1,6 +1,6 @@
 extends Camera3D
 
-var MOVE_SPEED = 4.0
+var MOVE_SPEED = 8.0
 var rot = Vector3()
 
 # Called when the node enters the scene tree for the first time.
