@@ -1,15 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://clkxv1amwrr48"]
+[gd_scene load_steps=8 format=3 uid="uid://clkxv1amwrr48"]
 
-[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_horlf"]
+[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://cobblestone.png" id="1_sn7gm"]
+[ext_resource type="Texture2D" uid="uid://dm8os7k6gwf4m" path="res://planks.png" id="2_jwqmn"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oy7ru"]
-albedo_texture = ExtResource("1_horlf")
+albedo_texture = ExtResource("1_sn7gm")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i07jl"]
-albedo_texture = ExtResource("1_horlf")
+albedo_texture = ExtResource("2_jwqmn")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
 
