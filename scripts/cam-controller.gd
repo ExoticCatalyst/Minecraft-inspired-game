@@ -38,7 +38,7 @@ var mouse_start_pos = Vector2()
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed:
 				mouse_start_pos = event.position
 				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -47,6 +47,6 @@ func _input(event):
 				get_viewport().warp_mouse(mouse_start_pos)
 	
 	if event is InputEventMouseMotion:
-		if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			rot.x += event.relative.y / -100.0
 			rot.y += event.relative.x / -100.0
