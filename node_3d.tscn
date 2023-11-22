@@ -1,12 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://clkxv1amwrr48"]
+[gd_scene load_steps=7 format=3 uid="uid://clkxv1amwrr48"]
 
-[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
+[ext_resource type="Texture2D" uid="uid://c2rvcme10omt1" path="res://dirt.png" id="1_8yjui"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s81je"]
+albedo_texture = ExtResource("1_8yjui")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqrb2"]
-albedo_texture = ExtResource("1_eevto")
+albedo_texture = ExtResource("1_8yjui")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
 
@@ -17,6 +20,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189369, 0.0408374, 8.2016e-05)
+material_override = SubResource("StandardMaterial3D_s81je")
 mesh = SubResource("BoxMesh_ho6gn")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
@@ -29,4 +33,4 @@ transform = Transform3D(1, 0, 0, 0, 0.798478, 0.602024, 0, -0.602024, 0.798478, 
 script = ExtResource("2_x4mri")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.490387, -0.832719, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.0318424, 1.74449, 0.768908)
+transform = Transform3D(0.490387, -0.832718, 0.257101, 0, 0.295008, 0.955495, -0.871505, -0.468562, 0.144668, 0.548862, 1.74449, 0.172245)
