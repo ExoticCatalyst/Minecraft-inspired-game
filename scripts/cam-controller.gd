@@ -1,6 +1,8 @@
 extends Camera3D
 
+var MOVING = false
 var MOVE_SPEED = 4.0
+var ACCELERATION = 0
 var rot = Vector3()
 
 # Called when the node enters the scene tree for the first time.
@@ -9,6 +11,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	print(ACCELERATION)
+	
 	var move_vec = Vector3(0, 0, 0)
 	
 	if Input.is_key_pressed(KEY_W):
@@ -29,7 +33,17 @@ func _process(delta):
 	if Input.is_key_pressed(KEY_Q):
 		move_vec.y = -1.0
 	
-	translate_object_local(move_vec * MOVE_SPEED * delta)
+	if !(move_vec.x == 0) or !(move_vec.y == 0) or !(move_vec.z == 0):
+		MOVING = true
+	else:
+		MOVING = false
+	
+	if MOVING:
+		ACCELERATION = ACCELERATION + 0.01
+	else:
+		ACCELERATION = 0
+	
+	translate_object_local(move_vec * (MOVE_SPEED + ACCELERATION) * delta)
 	rotation = Vector3()
 	rotate_x(rot.x)
 	rotate_y(rot.y)
