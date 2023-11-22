@@ -30,6 +30,14 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
+	# Unlock/Lock mouse
+	if Input.is_action_just_pressed("Esc") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		if Input.is_action_just_pressed("Esc") and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			
+
 	# Handle Jump.
 	if Input.is_action_pressed("space") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
