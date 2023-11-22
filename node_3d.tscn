@@ -1,15 +1,15 @@
 [gd_scene load_steps=7 format=3 uid="uid://clkxv1amwrr48"]
 
-[ext_resource type="Texture2D" uid="uid://c2rvcme10omt1" path="res://dirt.png" id="1_8yjui"]
+[ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_horlf"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s81je"]
-albedo_texture = ExtResource("1_8yjui")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oy7ru"]
+albedo_texture = ExtResource("1_horlf")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqrb2"]
-albedo_texture = ExtResource("1_8yjui")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i07jl"]
+albedo_texture = ExtResource("1_horlf")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
 
@@ -20,10 +20,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000591874, 0.00202352, -0.
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189369, 0.0408374, 8.2016e-05)
-material_override = SubResource("StandardMaterial3D_s81je")
+material_override = SubResource("StandardMaterial3D_oy7ru")
 mesh = SubResource("BoxMesh_ho6gn")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
+surface_material_override/0 = SubResource("StandardMaterial3D_i07jl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_0raci")
