@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcsj22exuixqy"]
+[gd_scene load_steps=9 format=3 uid="uid://bcsj22exuixqy"]
 
 [ext_resource type="Texture2D" uid="uid://qfv41j6ksefo" path="res://stone.png" id="1_eevto"]
 [ext_resource type="Script" path="res://scripts/cam-controller.gd" id="2_x4mri"]
@@ -9,6 +9,9 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqrb2"]
 specular_mode = 2
 albedo_texture = ExtResource("1_eevto")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ehpc2"]
+data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0raci"]
 
@@ -30,6 +33,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0189369, 0.0408374, 8.2016
 mesh = SubResource("BoxMesh_ho6gn")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_lqrb2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="StaticBody3D/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D/MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ehpc2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape3D_0raci")

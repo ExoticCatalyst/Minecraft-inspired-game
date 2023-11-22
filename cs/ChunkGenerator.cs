@@ -295,11 +295,29 @@ public partial class ChunkGenerator : Node3D
 		};
 
 		var meshInstance = new MeshInstance3D() {
-			Name = "ChunkMesh",
 			Mesh = arrayMesh,
 			MaterialOverride = material
 		};
 
-		AddChild(meshInstance);
+		var staticBody = new StaticBody3D() {
+			Name = $"Chunk ({cx}, {cz})"
+		};
+		var collisionShape = new ConcavePolygonShape3D();
+
+		var collisionPolygon = new Vector3[indices.Count];
+		for (int i = 0; i < indices.Count; i++)
+		{
+			collisionPolygon[i] = verts[indices[i]];
+		}
+
+		collisionShape.Data = collisionPolygon;
+		
+		var shapeNode = new CollisionShape3D() {
+			Shape = collisionShape
+		};
+
+		staticBody.AddChild(shapeNode);
+		staticBody.AddChild(meshInstance);
+		AddChild(staticBody);
 	}
 }
