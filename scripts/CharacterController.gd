@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 
 const SPEED = 3.5
-const JUMP_VELOCITY = 6.0
+const JUMP_VELOCITY = 3.0
 const SENSITIVITY = 0.005
 
 #head bobbing variables

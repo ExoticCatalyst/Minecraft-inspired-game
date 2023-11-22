@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8os7k6gwf4m"
-path.s3tc="res://.godot/imported/planks.png-ecb248a289368bd604f186de27c20877.s3tc.ctex"
+uid="uid://m4jgd4ytlmuw"
+path.s3tc="res://.godot/imported/stone.png-22ffee6b2bfc04dc22a3b61d0ddd974d.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://planks.png"
-dest_files=["res://.godot/imported/planks.png-ecb248a289368bd604f186de27c20877.s3tc.ctex"]
+source_file="res://Textures/stone.png"
+dest_files=["res://.godot/imported/stone.png-22ffee6b2bfc04dc22a3b61d0ddd974d.s3tc.ctex"]
 
 [params]
 
