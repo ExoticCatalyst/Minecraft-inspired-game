@@ -89,17 +89,17 @@ public partial class ChunkGenerator : Node3D
 		}
 	}
 
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
 
 		if (chunkUpdateQueue.TryDequeue(out Vector2I chunkPos))
 		{
 			MeshChunk(chunkPos.X, chunkPos.Y);
 		}
-    }
+	}
 
-    private void GenerateChunk(int cx, int cz)
+	private void GenerateChunk(int cx, int cz)
 	{
 		// if chunk at (cx, cz) already exists, do not regenerate chunk
 		if (TryGetChunk(cx, cz, out _)) return;
@@ -125,8 +125,8 @@ public partial class ChunkGenerator : Node3D
 		GD.Print($"chunk gen took {(Time.GetTicksMsec() - prevTime)} ms");
 	}
 
-    // Return true if a given block id is transparent
-    private static bool IsTransparent(int blockId)
+	// Return true if a given block id is transparent
+	private static bool IsTransparent(int blockId)
 	{
 		return blockId == 0;
 	}
@@ -148,16 +148,16 @@ public partial class ChunkGenerator : Node3D
 		int indicesIndex = 0;
 
 		// helper functions
-        void addVertexData(Vector3 normal)
-        {
-            /*uvs.Add(0); uvs.Add(0);
-            uvs.Add(1); uvs.Add(0);
-            uvs.Add(1); uvs.Add(1);
-            uvs.Add(0); uvs.Add(1);
-            normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
-            normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
-            normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
-            normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);*/
+		void addVertexData(Vector3 normal)
+		{
+			/*uvs.Add(0); uvs.Add(0);
+			uvs.Add(1); uvs.Add(0);
+			uvs.Add(1); uvs.Add(1);
+			uvs.Add(0); uvs.Add(1);
+			normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
+			normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
+			normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);
+			normals.Add(normal.X); normals.Add(normal.Y); normals.Add(normal.Z);*/
 			uvs.Add(new Vector2(0, 0));
 			uvs.Add(new Vector2(1, 0));
 			uvs.Add(new Vector2(1, 1));
@@ -166,14 +166,14 @@ public partial class ChunkGenerator : Node3D
 			normals.Add(normal);
 			normals.Add(normal);
 			normals.Add(normal);
-            indices.Add(indicesIndex + 0);
-            indices.Add(indicesIndex + 1);
-            indices.Add(indicesIndex + 2);
-            indices.Add(indicesIndex + 0);
-            indices.Add(indicesIndex + 2);
-            indices.Add(indicesIndex + 3);
-            indicesIndex += 4;
-        }
+			indices.Add(indicesIndex + 0);
+			indices.Add(indicesIndex + 1);
+			indices.Add(indicesIndex + 2);
+			indices.Add(indicesIndex + 0);
+			indices.Add(indicesIndex + 2);
+			indices.Add(indicesIndex + 3);
+			indicesIndex += 4;
+		}
 
 		// get voxels in neighbor chunk
 		var neighborChunks = new ChunkData[4];
@@ -201,7 +201,7 @@ public partial class ChunkGenerator : Node3D
 
 		// loop through all blocks in the chunk
 		// to generate mesh data
-        for (int x = 0; x < CHUNK_WIDTH; x++)
+		for (int x = 0; x < CHUNK_WIDTH; x++)
 		{
 			for (int y = 0; y < CHUNK_HEIGHT; y++)
 			{
