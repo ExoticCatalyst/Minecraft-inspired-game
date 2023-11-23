@@ -87,3 +87,5 @@ script = ExtResource("3_my4rh")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_durc2")
+
+[connection signal="player_teleport" from="CharacterBody3D/Head/Camera3D/UISprite/SubViewport/GameUI" to="CharacterBody3D" method="_on_game_ui_player_teleport"]

@@ -1,6 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://6s5buqfaejtr"]
+[gd_scene load_steps=4 format=3 uid="uid://6s5buqfaejtr"]
 
 [ext_resource type="Texture2D" uid="uid://debud6dt2lmc2" path="res://assets/crosshair.png" id="1_iphny"]
+
+[sub_resource type="GDScript" id="GDScript_bifui"]
+script/source = "extends Control
+
+signal player_teleport
+"
+
+[sub_resource type="GDScript" id="GDScript_0g7ai"]
+script/source = "extends Button
+
+func _pressed():
+	get_parent().player_teleport.emit()
+"
 
 [node name="GameUI" type="Control"]
 texture_filter = 1
@@ -10,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_bifui")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -20,3 +34,13 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_iphny")
 stretch_mode = 3
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 617.0
+offset_right = 177.0
+offset_bottom = 648.0
+text = "Teleport
+"
+script = SubResource("GDScript_0g7ai")

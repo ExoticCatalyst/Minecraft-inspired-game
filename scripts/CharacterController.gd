@@ -16,6 +16,7 @@ var gravity = 32
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var voxel_world = get_node("../VoxelWorld")
+@onready var game_ui = camera.get_node("UISprite/SubViewport/GameUI")
 
 var has_raycast_hit = false
 var raycast_grid = Vector3i()
@@ -24,15 +25,11 @@ var raycast_normal = Vector3()
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _input(event):
+func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(90))
-	
-	if event is InputEventKey:
-		if event.keycode == KEY_E and event.pressed:
-			position.y += 300
 	
 	if event is InputEventMouseButton:
 		if event.pressed and has_raycast_hit:
@@ -96,3 +93,7 @@ func headbob(time) -> Vector3:
 	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
+
+
+func _on_game_ui_player_teleport():
+	position.y += 300

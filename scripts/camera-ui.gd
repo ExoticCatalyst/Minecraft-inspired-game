@@ -22,5 +22,8 @@ func _process(_delta):
 	scale.y = float(get_viewport().size.y) / ui_viewport.size.y
 	pixel_size = 2.0 * (tan(deg_to_rad(camera.fov) / 2) * ui_dist) / get_viewport().size.x * aspect_ratio
 
-#func _unhandled_key_input(event):
-#	ui_viewport.push_unhandled_input(event)
+func _input(input):
+	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		ui_viewport.push_input(input)
+		if ui_viewport.is_input_handled():
+			get_viewport().set_input_as_handled()
