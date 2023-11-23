@@ -48,9 +48,9 @@ namespace Voxel
         }
 
         // Return true if a given block id is transparent
-        private static bool IsTransparent(uint blockIndex)
+        private bool IsTransparent(uint blockIndex)
         {
-            return blockIndex == 0;
+            return blockIndex == 0 || world.BlockTextureData[blockIndex - 1].transparent;
         }
 
         enum BlockSide

@@ -79,12 +79,14 @@ namespace Voxel
 			public string sideTexture { get; set; }
 			public string topTexture { get; set; }
 			public string bottomTexture { get; set; }
+			public bool transparent { get; set; }
 		};
 
 		public struct BlockTextureDef {
 			public uint sideIndex;
 			public uint topIndex;
 			public uint bottomIndex;
+			public bool transparent;
 		}
 
 		private string[] intIdToString;
@@ -142,6 +144,7 @@ namespace Voxel
 
 				// register textures
 				BlockTextureDef texDef;
+				texDef.transparent = entry.Value.transparent;
 
 				// if block has only one texture
 				if (entry.Value.texture != null)
@@ -248,6 +251,12 @@ namespace Voxel
 			var grassBlock = GetBlockIndex("grass");
 			var stoneBlock = GetBlockIndex("stone");
 			var dirtBlock = GetBlockIndex("dirt");
+			var logBlock = GetBlockIndex("log");
+			var leavesBlock = GetBlockIndex("leaves");
+
+			var rng = new RandomNumberGenerator() {
+				Seed = Pair2s(cx, cz)
+			};
 
 			for (int x = 0; x < CHUNK_WIDTH; x++)
 			{
@@ -271,6 +280,20 @@ namespace Voxel
 							block = grassBlock;
 						
 						chunkData.Set(x, y, z, block);
+					}
+
+					// tree chunk
+					if (rng.Randf() < 0.05)
+					{
+						int trunkHeight = 6;
+
+						for (int y = height+1; y <= height+trunkHeight; y++)
+						{
+							chunkData.Set(x, y, z, logBlock);
+						}
+
+						chunkData.Set(x, height + trunkHeight + 1, z, leavesBlock);
+						chunkData.Set(x+1, height + trunkHeight + 1, z, leavesBlock);
 					}
 				}
 			}

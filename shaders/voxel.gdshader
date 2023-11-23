@@ -4,5 +4,6 @@ uniform sampler2DArray block_textures : source_color, filter_nearest, repeat_ena
 
 void fragment() {
 	vec4 albedo_tex = texture(block_textures, vec3(UV, UV2.x));
+	if (albedo_tex.a < 1.0) discard;
 	ALBEDO = albedo_tex.rgb;
 }
