@@ -22,6 +22,11 @@ namespace Voxel
 				data[i] = 0;
 		}
 
+		public bool IsInBounds(int x, int y, int z)
+		{
+			return !(x < 0 || y < 0 || z < 0 || x >= SIZE_X || y >= SIZE_Y || z >= SIZE_Z);
+		}
+
 		public uint Get(int x, int y, int z)
 		{
 			// if coordinates are out of bounds, return air block
@@ -258,11 +263,20 @@ namespace Voxel
 				Seed = Pair2s(cx, cz)
 			};
 
+			const int baseHeight = 64;
+			const float amplitude = 20.0f;
+			const float scale = 2.0f;
+			const float treeDensity = 0.01f;
+
+			int heightAt(int x, int z) =>
+				(int)(noise.GetNoise2D(scale * (x + cx * CHUNK_WIDTH), scale * (z + cz * CHUNK_DEPTH)) * amplitude) + baseHeight;
+
+			// stage 1: generate base terrain
 			for (int x = 0; x < CHUNK_WIDTH; x++)
 			{
 				for (int z = 0; z < CHUNK_DEPTH; z++)
 				{
-					int height = (int)(noise.GetNoise2D(x + cx * CHUNK_WIDTH, z + cz * CHUNK_DEPTH) * 20) + 64;
+					int height = heightAt(x, z);
 
 					for (int y = 0; y < CHUNK_HEIGHT; y++)
 					{
@@ -281,19 +295,44 @@ namespace Voxel
 						
 						chunkData.Set(x, y, z, block);
 					}
+				}
+			}
+
+			// stage 2: generate trees
+			for (int x = -5; x < CHUNK_WIDTH + 5; x++)
+			{
+				for (int z = -5; z < CHUNK_DEPTH + 5; z++)
+				{
+					int height = heightAt(x, z);
+
+					rng.Seed = Pair2s(x + cx * CHUNK_WIDTH, z + cz * CHUNK_DEPTH);
 
 					// tree chunk
-					if (rng.Randf() < 0.05)
+					if (rng.Randf() < treeDensity)
 					{
-						int trunkHeight = 6;
+						int trunkHeight = rng.RandiRange(4, 6);
 
 						for (int y = height+1; y <= height+trunkHeight; y++)
 						{
 							chunkData.Set(x, y, z, logBlock);
 						}
 
-						chunkData.Set(x, height + trunkHeight + 1, z, leavesBlock);
-						chunkData.Set(x+1, height + trunkHeight + 1, z, leavesBlock);
+						int treeTop = height + trunkHeight + 1;
+						chunkData.Set(x, treeTop, z, leavesBlock);
+
+						chunkData.Set(x + 1, treeTop - 1, z, leavesBlock);
+						chunkData.Set(x - 1, treeTop - 1, z, leavesBlock);
+						chunkData.Set(x, treeTop - 1, z + 1, leavesBlock);
+						chunkData.Set(x, treeTop - 1, z - 1, leavesBlock);
+
+						for (int dx = -1; dx <= 1; dx++)
+						{
+							for (int dz = -1; dz <= 1; dz++)
+							{
+								if (dx == 0 && dz == 0) continue;
+								chunkData.Set(x + dx, treeTop - 2, z + dz, leavesBlock);
+							}
+						}
 					}
 				}
 			}
