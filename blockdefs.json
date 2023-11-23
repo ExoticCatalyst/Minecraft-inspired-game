@@ -1,28 +1,28 @@
 {
 	"stone": {
-		"texture": "res://Textures/stone.png"
+		"texture": "res://assets/blocks/stone.png"
 	},
 	"dirt": {
-		"texture": "res://Textures/dirt.png"
+		"texture": "res://assets/blocks/dirt.png"
 	},
 	"grass": {
-		"sideTexture": "res://Textures/grass side.png",
-		"topTexture": "res://Textures/grass top.png",
-		"bottomTexture": "res://Textures/dirt.png"
+		"sideTexture": "res://assets/blocks/grass side.png",
+		"topTexture": "res://assets/blocks/grass top.png",
+		"bottomTexture": "res://assets/blocks/dirt.png"
 	},
 	"cobblestone": {
-		"texture": "res://Textures/cobblestone.png"
+		"texture": "res://assets/blocks/cobblestone.png"
 	},
 	"log": {
-		"sideTexture": "res://Textures/log side.png",
-		"topTexture": "res://Textures/log top v2.png",
-		"bottomTexture": "res://Textures/log top v2.png"
+		"sideTexture": "res://assets/blocks/log side.png",
+		"topTexture": "res://assets/blocks/log top v2.png",
+		"bottomTexture": "res://assets/blocks/log top v2.png"
 	},
 	"leaves": {
 		"transparent": true,
-		"texture": "res://Textures/leaves v2.png"
+		"texture": "res://assets/blocks/leaves v2.png"
 	},
 	"planks": {
-		"texture": "res://Textures/planks.png"
+		"texture": "res://assets/blocks/planks.png"
 	}
 }

@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://dm8os7k6gwf4m"
+path="res://.godot/imported/planks.png-482ec2df05e0ea95a61dcb4d3ae89802.image"
+
+[deps]
+
+source_file="res://assets/blocks/planks.png"
+dest_files=["res://.godot/imported/planks.png-482ec2df05e0ea95a61dcb4d3ae89802.image"]
+
+[params]
+

@@ -1,8 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcsj22exuixqy"]
+[gd_scene load_steps=14 format=3 uid="uid://bcsj22exuixqy"]
 
 [ext_resource type="Script" path="res://scripts/CharacterController.gd" id="2_7485g"]
 [ext_resource type="Script" path="res://scripts/DayCycle.gd" id="2_x43co"]
+[ext_resource type="Script" path="res://scripts/camera-ui.gd" id="3_emh2i"]
 [ext_resource type="Script" path="res://cs/VoxelWorld.cs" id="3_my4rh"]
+[ext_resource type="PackedScene" uid="uid://6s5buqfaejtr" path="res://scenes/game-ui.tscn" id="4_abw51"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ho6gn"]
 
@@ -17,6 +19,9 @@ data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xi2vj"]
 size = Vector3(0.6, 1.8, 0.6)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_r42fc"]
+viewport_path = NodePath("CharacterBody3D/Head/Camera3D/UISprite/SubViewport")
 
 [sub_resource type="Environment" id="Environment_durc2"]
 background_mode = 1
@@ -67,7 +72,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 
-[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
+[node name="UISprite" type="Sprite3D" parent="CharacterBody3D/Head/Camera3D"]
+no_depth_test = true
+texture = SubResource("ViewportTexture_r42fc")
+script = ExtResource("3_emh2i")
+
+[node name="SubViewport" type="SubViewport" parent="CharacterBody3D/Head/Camera3D/UISprite"]
+transparent_bg = true
+
+[node name="GameUI" parent="CharacterBody3D/Head/Camera3D/UISprite/SubViewport" instance=ExtResource("4_abw51")]
 
 [node name="VoxelWorld" type="Node3D" parent="."]
 script = ExtResource("3_my4rh")

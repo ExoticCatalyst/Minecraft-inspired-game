@@ -11,10 +11,10 @@ config_version=5
 [application]
 
 config/name="Minecraft-inspired-game"
-run/main_scene="res://node_3d.tscn"
+run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
-boot_splash/image="res://Textures/grass side.png"
-config/icon="res://Textures/grass side.png"
+boot_splash/image="res://assets/blocks/grass side.png"
+config/icon="res://assets/blocks/grass side.png"
 
 [dotnet]
 

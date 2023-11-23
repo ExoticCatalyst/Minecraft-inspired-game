@@ -16,7 +16,6 @@ var gravity = 32
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var voxel_world = get_node("../VoxelWorld")
-@onready var raycaster = $Head/Camera3D/RayCast3D
 
 var has_raycast_hit = false
 var raycast_grid = Vector3i()
