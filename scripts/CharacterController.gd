@@ -31,6 +31,10 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-90), deg_to_rad(90))
 	
+	if event is InputEventKey:
+		if event.keycode == KEY_E and event.pressed:
+			position.y += 300
+	
 	if event is InputEventMouseButton:
 		if event.pressed and has_raycast_hit:
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -67,11 +71,6 @@ func _physics_process(delta):
 		velocity.x = 0
 		velocity.z = 0
 	
-	#Head bob
-	if not is_on_wall():
-		t_bob += delta * velocity.length() *  float(is_on_floor())
-		camera.transform.origin = _headbob(t_bob)
-	
 	# raycast
 	var mouse_pos = get_viewport().get_mouse_position()
 	var from = camera.project_ray_origin(mouse_pos)
@@ -87,8 +86,14 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
-func _headbob(time) -> Vector3:
+	# head bob
+	var speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
+	t_bob += delta * speed * float(is_on_floor())
+	camera.transform.origin = headbob(t_bob)
+	head.rotation.x = velocity.y / 500
+
+func headbob(time) -> Vector3:
 	var pos = Vector3.ZERO
-	pos.y = sin(time * BOB_FREQ) * BOB_AMP + 0.6
+	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
