@@ -63,9 +63,9 @@ mesh = SubResource("CapsuleMesh_cjqti")
 shape = SubResource("BoxShape3D_xi2vj")
 
 [node name="Head" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.545283, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
 
