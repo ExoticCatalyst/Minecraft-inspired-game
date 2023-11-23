@@ -4,6 +4,8 @@ Hello, ill just be updating this as the game development progresses.
 
 <11/22/23>
 
+added grass, dirt, and stone generation
+
 added terrain gen
 
 fixed character physics
