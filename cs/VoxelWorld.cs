@@ -123,7 +123,8 @@ namespace Voxel
 
 			uint registerImage(string texturePath)
 			{
-				var image = GD.Load(texturePath) as Image;
+                var texture = GD.Load(texturePath) as Texture2D;
+				var image = texture.GetImage();
 
 				// format and size validation
 				if (image.GetSize() != new Vector2I(32, 32))
@@ -134,7 +135,8 @@ namespace Voxel
 				var format = image.GetFormat();
 				if (format != Image.Format.Rgba8)
 				{
-					throw new Exception($"{texturePath} has invalid format {format}, expected Rgba8");
+					GD.Print($"converting {texturePath} from {format} to Rgba8");
+					image.Convert(Image.Format.Rgba8);
 				}
 				
 				images.Add(image);
