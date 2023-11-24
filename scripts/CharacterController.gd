@@ -16,7 +16,7 @@ var gravity = 32
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var voxel_world = get_node("../VoxelWorld")
-@onready var raycaster = $Head/Camera3D/RayCast3D
+@onready var game_ui = camera.get_node("UISprite/SubViewport/GameUI")
 
 var has_raycast_hit = false
 var raycast_grid = Vector3i()
@@ -25,7 +25,7 @@ var raycast_normal = Vector3()
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-func _input(event):
+func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
@@ -67,11 +67,6 @@ func _physics_process(delta):
 		velocity.x = 0
 		velocity.z = 0
 	
-	#Head bob
-	if not is_on_wall():
-		t_bob += delta * velocity.length() *  float(is_on_floor())
-		camera.transform.origin = _headbob(t_bob)
-	
 	# raycast
 	var mouse_pos = get_viewport().get_mouse_position()
 	var from = camera.project_ray_origin(mouse_pos)
@@ -87,8 +82,18 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
-func _headbob(time) -> Vector3:
+	# head bob
+	var speed = sqrt(velocity.x * velocity.x + velocity.z * velocity.z)
+	t_bob += delta * speed * float(is_on_floor())
+	camera.transform.origin = headbob(t_bob)
+	head.rotation.x = velocity.y / 500
+
+func headbob(time) -> Vector3:
 	var pos = Vector3.ZERO
-	pos.y = sin(time * BOB_FREQ) * BOB_AMP + 0.6
+	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
+
+
+func _on_game_ui_player_teleport():
+	position.y += 300
